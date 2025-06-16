@@ -1,0 +1,37 @@
+<!-- static/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Psychology Chatbot</title>
+</head>
+<body>
+  <h2>Psychology Chatbot</h2>
+  <label>Instruction:</label><br>
+  <input id="instruction" value="You are a psychology bot who answers empathetically."><br><br>
+  
+  <label>User Message:</label><br>
+  <textarea id="input" rows="4" cols="50"></textarea><br><br>
+
+  <button onclick="generate()">Ask</button>
+
+  <h3>Response:</h3>
+  <pre id="response"></pre>
+
+  <script>
+    async function generate() {
+      const instruction = document.getElementById("instruction").value;
+      const input = document.getElementById("input").value;
+
+      const res = await fetch("/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ instruction, input }),
+      });
+
+      const data = await res.json();
+      document.getElementById("response").innerText = data.response;
+    }
+  </script>
+</body>
+</html>
