@@ -1,37 +1,124 @@
-<!-- static/index.html -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <title>Psychology Chatbot</title>
+  <title>Emotional ChatBot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', path='chatbot.css') }}">
 </head>
+
 <body>
-  <h2>Psychology Chatbot</h2>
-  <label>Instruction:</label><br>
-  <input id="instruction" value="You are a psychology bot who answers empathetically."><br><br>
-  
-  <label>User Message:</label><br>
-  <textarea id="input" rows="4" cols="50"></textarea><br><br>
+  <div class="app-container">
+    <div class="header">
+      <div class="header-left">
+        <div class="indicator"></div>
+        <div class="title">Psykit</div>
+      </div>
 
-  <button onclick="generate()">Ask</button>
+      <div class="hamburger" onclick="toggleMenu()">☰</div>
 
-  <h3>Response:</h3>
-  <pre id="response"></pre>
+      <div class="header-buttons">
+        <button class="new-chat-btn" onclick="clearChat()">Clear Chat</button>
+        <button class="logout-btn" onclick="window.location.href='/logout'">Sign Out</button>
+      </div>
+
+      <div class="mobile-menu" id="mobileMenu">
+        <button onclick="clearChat()">Clear Chat</button>
+        <button onclick="window.location.href='/logout'">Sign Out</button>
+      </div>
+    </div>
+
+
+    <div class="chat-container">
+      <div id="chatbox">
+        {% for entry in history %}
+        <div class="user-message"><strong>You:</strong> {{ entry.message }}</div>
+        <div class="bot-message"><strong>Bot:</strong> {{ entry.response }}</div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="input-container">
+      <textarea id="input" rows="3" placeholder="Type how you feel..."></textarea>
+      <button id="button" onclick="send()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up"
+          viewBox="0 0 16 16">
+          <path fill-rule="evenodd"
+            d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5" />
+        </svg>
+      </button>
+    </div>
+  </div>
 
   <script>
-    async function generate() {
-      const instruction = document.getElementById("instruction").value;
-      const input = document.getElementById("input").value;
+    function toggleMenu() {
+      const menu = document.getElementById("mobileMenu");
+      menu.classList.toggle("show");
+    }
+    const escapeHtml = (unsafe) =>
+      unsafe.replace(/[&<"']/g, m => ({ '&': '&amp;', '<': '&lt;', '"': '&quot;', "'": "&#039;" }[m]));
 
-      const res = await fetch("/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ instruction, input }),
-      });
+    async function send() {
+      const inputField = document.getElementById("input");
+      const input = inputField.value.trim();
+      if (!input) return;
 
-      const data = await res.json();
-      document.getElementById("response").innerText = data.response;
+      const chatbox = document.getElementById("chatbox");
+      chatbox.innerHTML += `<div class="user-message"><strong>You:</strong> ${escapeHtml(input)}</div>`;
+      inputField.value = "";
+
+      chatbox.innerHTML += `<div class="bot-message" id="loading"><em>Bot is typing...</em></div>`;
+
+      try {
+        const res = await fetch("/send", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ input })
+        });
+
+        const data = await res.json();
+        document.getElementById("loading").remove();
+        chatbox.innerHTML += `<div class="bot-message"><strong>Bot:</strong> ${escapeHtml(data.response)}</div>`;
+      } catch (error) {
+        document.getElementById("loading").remove();
+        chatbox.innerHTML += `<div class="bot-message" style="color:red;"><strong>Error:</strong> ${escapeHtml(error.message)}</div>`;
+      }
+
+      chatbox.scrollTop = chatbox.scrollHeight;
+    }
+
+    function clearChat() {
+      document.getElementById("chatbox").innerHTML = "";
+      document.getElementById("input").value = "";
+    }
+
+    window.onload = () => {
+      const chatbox = document.getElementById("chatbox");
+      chatbox.scrollTop = chatbox.scrollHeight;
+    };
+
+    async function clearChat() {
+      const confirmClear = confirm("Are you sure you want to clear your chat history?");
+      if (!confirmClear) return;
+
+      // Clear from frontend
+      document.getElementById("chatbox").innerHTML = "";
+      document.getElementById("input").value = "";
+
+      // Clear from backend
+      try {
+        const res = await fetch("/clear_history", { method: "POST" });
+        const data = await res.json();
+        if (data.status !== "ok") {
+          alert("Failed to clear chat history.");
+        }
+      } catch (err) {
+        console.error("Error clearing history:", err);
+        alert("Error clearing chat history.");
+      }
     }
   </script>
 </body>
+
 </html>

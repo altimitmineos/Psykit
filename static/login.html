@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Emotional ChatBot - Login</title>
+  <link rel="stylesheet" href="/static/login.css" />
+</head>
+
+<body>
+  <div class="login-page">
+    <div class="branding">
+      <div class="circle"></div>
+      <div class="branding-text">
+        <h1>Psykit</h1>
+        <p class="tagline">an emotional chatbot</p>
+      </div>
+    </div>
+
+    <div class="login-box">
+      <h2>Login</h2>
+      <form method="POST" action="/login">
+        <input type="email" name="email" placeholder="Email Address *" required />
+        <input type="password" name="password" placeholder="Password *" required />
+        <button type="submit">Login</button>
+      </form>
+
+      <p class="signup-text">Don’t have an account? <a href="/signup">Sign Up</a></p>
+    </div>
+  </div>
+</body>
+
+</html>

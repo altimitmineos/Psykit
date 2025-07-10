@@ -1,0 +1,261 @@
+/* Global settings */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: monospace;
+  background-color: #1f3a29;
+  color: white;
+  overflow-x: hidden;
+}
+
+/* Container utama */
+.app-container {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+  padding-bottom: 0px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px 20px;
+  background-color: #1f3a29;
+  position: relative;
+  z-index: 999;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.indicator {
+  width: 14px;
+  height: 14px;
+  background-color: #b6e2a1;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.title {
+  font-size: 1.2rem;
+  color: white;
+}
+
+/* Buttons (desktop) */
+.header-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.new-chat-btn,
+.logout-btn {
+  background-color: #1f3a29;
+  color: white;
+  border: 1px solid white;
+  border-radius: 20px;
+  padding: 5px 15px;
+  cursor: pointer;
+  font-family: monospace;
+  font-size: 1rem;
+}
+
+/* Hamburger (hidden by default) */
+.hamburger {
+  display: none;
+  font-size: 2rem;
+  color: white;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+/* Mobile menu */
+.mobile-menu {
+  display: none;
+  position: absolute;
+  top: 60px;
+  right: 20px;
+  background-color: #2a4a36;
+  border: 1px solid #80c693;
+  border-radius: 10px;
+  padding: 10px;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1000;
+}
+
+.mobile-menu.show {
+  display: flex;
+}
+
+.mobile-menu button {
+  background-color: #1f3a29;
+  color: white;
+  border: 1px solid white;
+  border-radius: 10px;
+  padding: 10px;
+  font-family: monospace;
+  font-size: 1rem;
+  cursor: pointer;
+  width: 100%;
+}
+
+/* Chat area */
+.chat-container {
+  flex-grow: 1;
+  margin: 20px 0;
+  margin-bottom: 6px;
+  overflow-y: auto;
+}
+
+/* Messages */
+.user-message,
+.bot-message {
+  padding: 10px 15px;
+  border-radius: 15px;
+  margin: 10px 0;
+  font-family: monospace;
+  max-width: 90%;
+  word-wrap: break-word;
+}
+
+.user-message {
+  background-color: #d7fdd7;
+  color: #000;
+  align-self: flex-end;
+}
+
+.bot-message {
+  background-color: #1f3a29;
+  border: 1px solid #80c693;
+  color: #d7fdd7;
+  align-self: flex-start;
+}
+
+/* Input area */
+.input-container {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+  padding: 20px;
+  background-color: #001306;
+  border-radius: 10px;
+  margin-top: auto;
+  flex-wrap: nowrap;
+}
+
+#input {
+  flex: 1;
+  padding: 15px;
+  border-radius: 15px;
+  border: 1px solid #80c693;
+  font-family: monospace;
+  font-size: 1rem;
+  resize: none;
+  background-color: #d7fdd7;
+  color: #000;
+  box-shadow: 0 0 10px rgba(128, 198, 147, 0.3);
+  min-height: 48px;
+  box-sizing: border-box;
+}
+
+#button {
+  padding: 0 20px;
+  border-radius: 15px;
+  border: 1px solid #80c693;
+  background-color: #d7fdd7;
+  color: #000;
+  box-shadow: 0 0 10px rgba(128, 198, 147, 0.3);
+  font-family: monospace;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+
+/* Responsive Design */
+@media  screen and (max-width: 768px) {
+  .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .app-container {
+    padding-top: 58px; /* offset for fixed header */
+  }
+
+  .header-buttons {
+    display: none;
+  }
+
+  .hamburger {
+    display: block;
+    padding-right: 35px;
+  }
+
+  .mobile-menu {
+    margin-right: 35px;
+  }
+
+@media (max-width: 768px) {
+  .input-container {
+    flex-direction: row;
+    align-items: stretch;
+    padding: 10px;
+  }
+
+  #input {
+    font-size: 0.9rem;
+    padding: 12px;
+  }
+
+  #button {
+    font-size: 0.9rem;
+    padding: 0 15px;
+  }
+}
+
+  .user-message,
+  .bot-message {
+    max-width: 100%;
+  }
+
+  .chat-container{
+    margin: 0px;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1rem;
+  }
+
+  .new-chat-btn,
+  .logout-btn,
+  .mobile-menu button {
+    padding: 5px 10px;
+    font-size: 0.9rem;
+  }
+
+  #input {
+    font-size: 0.9rem;
+    padding: 12px;
+  }
+
+  #button {
+    font-size: 0.9rem;
+    padding: 12px;
+  }
+}
