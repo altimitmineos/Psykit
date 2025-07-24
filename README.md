@@ -33,5 +33,5 @@
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/yourusername/psykit.git
+git clone https://github.com/altimitmineos/psykit.git
 cd psykit
